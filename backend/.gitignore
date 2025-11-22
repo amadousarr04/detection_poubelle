@@ -7,10 +7,10 @@ __pycache__/
 venv/
 env/
 
-# Modèles
-*.pt
-*.pth
-*.onnx
+# Modèles - IMPORTANT: best.pt est géré par Git LFS
+# *.pt
+# *.pth
+# *.onnx
 
 # IDE
 .vscode/

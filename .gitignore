@@ -8,8 +8,8 @@ venv/
 env/
 .env
 
-# Models (utiliser Git LFS ou hébergement externe)
-backend/best.pt
+# Models - IMPORTANT: best.pt est géré par Git LFS, ne pas ignorer
+# backend/best.pt
 
 # Logs
 *.log
