@@ -12,7 +12,7 @@ const isLocal = window.location.hostname === 'localhost' ||
 // En production : URL du backend déployé sur Render
 const API_URL = isLocal
     ? 'http://127.0.0.1:8000'
-    : 'https://detection-poubelle.onrender.com';
+    : 'https://detection-poubelle-backend.onrender.com';
 
 console.log('🌍 Environnement:', isLocal ? 'LOCAL' : 'PRODUCTION');
 console.log('📡 API URL:', API_URL);
@@ -66,7 +66,7 @@ downloadModelBtn.addEventListener('click', async () => {
         downloadModelBtn.disabled = true;
         downloadModelBtn.innerHTML = '<span class="link-icon">⏳</span> Téléchargement...';
         
-        const response = await fetch(`${API_URL}/download-model`);
+        const response = await fetch(`${API_URL}/api/model/download`);
         
         if (!response.ok) {
             throw new Error('Erreur lors du téléchargement');
@@ -267,7 +267,7 @@ async function analyzeImage() {
     
     try {
         // Appel API
-        const response = await fetch(`${API_URL}/predict`, {
+        const response = await fetch(`${API_URL}/api/predict/image`, {
             method: 'POST',
             body: formData
         });
@@ -481,7 +481,7 @@ function animateValue(id, start, end, duration) {
 console.log('🗑️ Application Détecteur de Poubelles chargée');
 
 // Test de connexion à l'API
-fetch(`${API_URL}/health`)
+fetch(`${API_URL}/api/health`)
     .then(response => {
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
