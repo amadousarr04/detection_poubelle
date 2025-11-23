@@ -34,14 +34,8 @@ app = FastAPI(
 # ============================================================================
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "*",  # Permet tous les domaines (développement et production)
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "https://detecteur-poubelles-frontend.onrender.com",
-        "https://detection-poubelle-frontend.onrender.com"
-    ],
-    allow_credentials=True,
+    allow_origins=["*"],  # Permet tous les domaines
+    allow_credentials=False,  # Doit être False quand allow_origins=["*"]
     allow_methods=["*"],
     allow_headers=["*"],
 )
