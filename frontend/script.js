@@ -7,7 +7,7 @@
 // En production : remplacer par l'URL de votre backend déployé
 const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://127.0.0.1:8000'
-    : 'https://detection-poubelle.onrender.com';  // Remplacer par votre URL de production
+    : 'https://detecteur-poubelles-backend.onrender.com';  // URL du backend sur Render
 
 // ============================================================================
 // ELEMENTS DOM
