@@ -3,11 +3,20 @@
 // ============================================================================
 
 // URL de l'API backend
+// Détection automatique de l'environnement
+const isLocal = window.location.hostname === 'localhost' || 
+                window.location.hostname === '127.0.0.1' || 
+                window.location.hostname === '';
+
 // En développement local : http://127.0.0.1:8000
-// En production : remplacer par l'URL de votre backend déployé
-const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+// En production : URL du backend déployé sur Render
+// NOTE: Changez cette URL par celle de VOTRE backend Render une fois déployé
+const API_URL = isLocal
     ? 'http://127.0.0.1:8000'
-    : 'https://detecteur-poubelles-backend.onrender.com';  // URL du backend sur Render
+    : 'https://detecteur-poubelles-backend.onrender.com';
+
+console.log('🌍 Environnement:', isLocal ? 'LOCAL' : 'PRODUCTION');
+console.log('📡 API URL:', API_URL);
 
 // ============================================================================
 // ELEMENTS DOM
@@ -471,15 +480,37 @@ function animateValue(id, start, end, duration) {
 // ============================================================================
 
 console.log('🗑️ Application Détecteur de Poubelles chargée');
-console.log(`📡 API URL: ${API_URL}`);
 
 // Test de connexion à l'API
 fetch(`${API_URL}/health`)
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        return response.json();
+    })
     .then(data => {
         console.log('✅ API connectée:', data);
+        // Afficher un indicateur visuel de connexion réussie
+        const badge = document.querySelector('.badge-success');
+        if (badge) {
+            badge.textContent = '✓ API Connectée';
+            badge.style.animation = 'pulse 2s infinite';
+        }
     })
     .catch(error => {
         console.error('❌ Erreur de connexion à l\'API:', error);
-        showError('Impossible de se connecter au serveur. Vérifiez que le backend est démarré.');
+        console.error('🔍 Vérifiez que le backend est déployé sur:', API_URL);
+        
+        // Afficher un avertissement visuel
+        const badge = document.querySelector('.badge-success');
+        if (badge) {
+            badge.textContent = '⚠️ Backend non disponible';
+            badge.style.background = 'rgba(239, 68, 68, 0.2)';
+            badge.style.color = '#fecaca';
+            badge.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+        }
+        
+        // Ne pas afficher d'erreur au chargement, juste un log
+        console.warn('ℹ️ Le backend sera requis pour analyser les images');
     });
