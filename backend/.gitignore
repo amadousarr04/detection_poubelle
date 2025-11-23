@@ -1,0 +1,21 @@
+# Environnement
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+
+# Modèles - IMPORTANT: best.pt est géré par Git LFS
+# *.pt
+# *.pth
+# *.onnx
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
