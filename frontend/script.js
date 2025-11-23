@@ -295,6 +295,9 @@ function displayResults(data) {
     const resultCard = document.querySelector('.result-card');
     const resultHeader = document.querySelector('.result-header');
     
+    // Dessiner l'image avec la bounding box
+    drawImageWithBBox(data);
+    
     // Emoji et statut
     document.getElementById('resultEmoji').textContent = data.emoji;
     document.getElementById('resultStatus').textContent = data.status;
@@ -319,6 +322,74 @@ function displayResults(data) {
     document.getElementById('priority').textContent = data.priority || 'N/A';
     document.getElementById('numDetections').textContent = data.num_detections || 0;
     document.getElementById('processingTime').textContent = `${data.processing_time}s`;
+}
+
+/**
+ * Dessiner l'image avec la bounding box
+ */
+function drawImageWithBBox(data) {
+    const canvas = document.getElementById('resultCanvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    
+    img.onload = function() {
+        // Ajuster la taille du canvas
+        const maxWidth = 800;
+        const maxHeight = 600;
+        let width = img.width;
+        let height = img.height;
+        
+        // Redimensionner si nécessaire
+        if (width > maxWidth) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
+        }
+        if (height > maxHeight) {
+            width = (width * maxHeight) / height;
+            height = maxHeight;
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        
+        // Dessiner l'image
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        // Dessiner la bounding box si disponible
+        if (data.bbox && data.num_detections > 0) {
+            const scaleX = width / img.width;
+            const scaleY = height / img.height;
+            
+            const x1 = data.bbox.x1 * scaleX;
+            const y1 = data.bbox.y1 * scaleY;
+            const x2 = data.bbox.x2 * scaleX;
+            const y2 = data.bbox.y2 * scaleY;
+            
+            const boxWidth = x2 - x1;
+            const boxHeight = y2 - y1;
+            
+            // Dessiner le rectangle
+            ctx.strokeStyle = data.color;
+            ctx.lineWidth = 4;
+            ctx.strokeRect(x1, y1, boxWidth, boxHeight);
+            
+            // Fond pour le label
+            const label = `${data.status} ${data.confidence_percent}%`;
+            ctx.font = 'bold 18px Arial';
+            const textWidth = ctx.measureText(label).width;
+            const textHeight = 24;
+            
+            // Rectangle de fond pour le texte
+            ctx.fillStyle = data.color;
+            ctx.fillRect(x1, y1 - textHeight - 8, textWidth + 16, textHeight + 8);
+            
+            // Texte
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText(label, x1 + 8, y1 - 10);
+        }
+    };
+    
+    img.src = previewImage.src;
 }
 
 /**
