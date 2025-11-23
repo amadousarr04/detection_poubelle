@@ -12,7 +12,7 @@ const isLocal = window.location.hostname === 'localhost' ||
 // En production : URL du backend déployé sur Render
 const API_URL = isLocal
     ? 'http://127.0.0.1:8000'
-    : 'https://detection-poubelle.onrender.com';
+    : 'https://detection-poubelle-backend.onrender.com';
 
 console.log('🌍 Environnement:', isLocal ? 'LOCAL' : 'PRODUCTION');
 console.log('📡 API URL:', API_URL);
